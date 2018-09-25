@@ -9,10 +9,6 @@
             width: 100%;
         }
 
-        rect { 
-            fill: steelblue;
-        }
-
         button {
             width: 150px;
             height: 100px;
@@ -87,7 +83,6 @@
             }
 
             document.getElementById('row_input').onchange = function(ev) {
-                console.log(ev);
                 const rows = ev.target.value;
 
                 data = [];
@@ -98,11 +93,9 @@
                 var p = d3.select("svg")
                     .selectAll("rect")
                     .data(data)
-                        .attr("x", 0)
                         .attr("y", function(d, i) {
                             return (svg_height / rows) * i;
                         })
-                        .attr("width", svg_width)
                         .attr("height", function() {
                             return svg_height / rows;
                         })
