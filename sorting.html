@@ -26,6 +26,10 @@
         <br />
         <button id='step'>Sort one step</button>
         <button id='sort'>Bubble sort!</button>
+        <label>
+            Set number of rows:
+            <input id="row_input" type="number" min="1" max="10000" value=100></input>
+        </label>
 
         <script>
             var data = []
@@ -80,6 +84,43 @@
         
             document.getElementById('sort').onclick = function() {
                 setInterval(step, 125);
+            }
+
+            document.getElementById('row_input').onchange = function(ev) {
+                console.log(ev);
+                const rows = ev.target.value;
+
+                data = [];
+                for (i=0; i < rows; ++i) {
+                    data.push(Math.random())
+                }
+
+                var p = d3.select("svg")
+                    .selectAll("rect")
+                    .data(data)
+                        .attr("x", 0)
+                        .attr("y", function(d, i) {
+                            return (svg_height / rows) * i;
+                        })
+                        .attr("width", svg_width)
+                        .attr("height", function() {
+                            return svg_height / rows;
+                        })
+                        .style("fill", color_scale);
+
+                p.enter()
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function(d, i) {
+                        return (svg_height / rows) * i;
+                    })
+                    .attr("width", svg_width)
+                    .attr("height", function() {
+                        return svg_height / rows;
+                    })
+                    .style("fill", color_scale);
+
+                p.exit().remove();
             }
 
         </script>
