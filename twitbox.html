@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="./lib/d3.min.js"></script>
+
+        <style>
+            svg {
+                width: 500px;
+                height: 20px;
+            }
+            textarea {
+                width: 500px;
+                height: 80px;
+            }
+            line {
+                stroke-linecap: round;
+            }
+        </style>
+    </head>
+
+    <body>
+        <svg></svg> <br />
+        <textarea id='input_area' maxlength=120 placeholder="Type your brain...."></textarea>
+        <p id='status'>0/120</p>
+    </body>
+
+    <script>
+        const status = document.getElementById('status');
+
+        const svgContainer = d3.select("svg");
+
+        var lineScale = d3.scaleLinear()
+            .domain([0, 120])
+            .range([10, 490]);
+
+        svgContainer.append("line")
+            .attr("x1", 10)
+            .attr("x2", 490)
+            .attr("y1", 10)
+            .attr("y2", 10)
+            .attr("stroke", "blue")
+            .attr("stroke-width", "20");
+
+        svgContainer.append("line")
+            .attr("x1", 10)
+            .attr("x2", 10)
+            .attr("y1", 10)
+            .attr("y2", 10)
+            .attr("stroke", "yellow")
+            .attr("stroke-width", 15)
+            .attr("class", "progress");
+
+        document.getElementById('input_area').oninput = function(ev) {
+            const text = ev.target.value;
+            const l = text.length;
+
+            svgContainer.select(".progress")
+                .data([l])
+                .transition()
+                .duration(500)
+                .ease(d3.easeCubicOut)
+                    .attr("x2", lineScale);
+
+            status.innerText = l + '/120';
+        }
+    </script>
+</html>
