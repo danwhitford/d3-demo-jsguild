@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="./lib/d3.min.js"></script>
+
+        <style>
+            .circle {
+                border: 1px solid black;
+                border-radius: 50%;
+                height: 70px;
+                width: 70px;
+                display: inline-block;
+                text-align: center;
+                vertical-align: middle;
+                line-height: 70px;
+                color: white;
+            }
+
+            button {
+                width: 150px;
+                height: 100px;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="content">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+    
+        <br />
+        <button id='update'>Update</button>
+        <button id='enter'>Update & enter</button>
+        <button id='exit'>Update & exit</button>
+        <button id='combo'>Update, enter & exit</button>
+
+
+        <script>
+            d3.select("#content")
+                .selectAll("div")
+                .data([1, 1, 2, 3, 5])
+                .style("background-color", "gray")
+                .text(function(d) { return d; } );
+
+
+            document.getElementById('update').onclick = function() {
+                var p = d3.select("#content")
+                    .selectAll("div")
+                    .data([1, 1, 2, 3, 5, 8, 13, 21, 34])
+                    .style("background-color", "red")
+                    .text(function(d) { return d; } );
+
+            };
+
+            document.getElementById('enter').onclick = function() {
+                var p = d3.select("#content")
+                    .selectAll("div")
+                    .data([1, 1, 2, 3, 5, 8, 13, 21, 34])
+                    .style("background-color", "red")
+                    .text(function(d) { return d; } );
+
+
+                p.enter()
+                    .append("div")
+                    .attr("class", "circle")
+                    .text(function(d) { return d; })
+                    .style("background-color", "blue");
+            }
+
+            document.getElementById('exit').onclick = function() {
+                var p = d3.select('#content')
+                    .selectAll("div")
+                    .data( [1, 1, 2] )
+                    .style("background-color", "red")
+                    .text(function(d) { return d });
+
+                p.exit().remove();
+            }
+
+            document.getElementById('combo').onclick = function() {
+                var p = d3.select("#content")
+                    .selectAll("div")
+                    .data([1, 1, 2, 3, 5, 8, 13, 21])
+                        .style("background-color", "red")
+                        .text(function(d) { return d; } );
+
+
+                p.enter()
+                    .append("div")
+                    .attr("class", "circle")
+                    .text(function(d) { return d; })
+                    .style("background-color", "blue");
+
+                p.exit().remove();
+            }
+        </script>  
+    </body>
+</html>

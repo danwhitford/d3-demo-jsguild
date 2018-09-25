@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="./lib/d3.min.js"></script>
+
+    <style>
+        svg {
+            height: 500px;
+            width: 500px;
+        }
+
+        rect { 
+            fill: steelblue;
+            stroke: white;
+        }
+    </style>
+</head>
+
+<html>
+    <body>
+        <svg></svg>
+        <br />
+        <button id='btn'>Refresh data</button>
+        <input type="color" id="color_picker" value="#4682b4">Change colour</button>
+
+        <script>
+            var data = []
+            for (i=0; i < 20; ++i) {
+                data.push(Math.random())
+            }
+
+            d3.select("svg")
+                .selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function(d, i) {
+                        return (500 / data.length) * i;
+                    })
+                    .attr("width", function(d) {
+                        return d * 500;
+                    })
+                    .attr("height", function() {
+                        return 500 / data.length;
+                    });
+
+            document.getElementById('btn').onclick = function() {
+                var data = []
+                for (i=0; i < 20; ++i) {
+                    data.push(Math.random())
+                }
+
+                d3.select("svg")
+                    .selectAll("rect")
+                    .data(data)
+                    .transition()
+                    .delay(100)
+                    .duration(800)
+                    .attr("width", function(d) {
+                        return d * 500;
+                    });
+            }
+
+            document.getElementById('color_picker').onchange = function(ev) {
+
+                d3.select("svg")
+                    .selectAll("rect")
+                    .transition()
+                    .duration(3000)
+                    .style("fill", function() {
+                        return ev.target.value;
+                    });
+                    
+            }
+        </script>
+    </body>
+</html>

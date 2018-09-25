@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="./lib/d3.min.js"></script>
+
+        <style>
+            .circle {
+                border: 1px solid black;
+                border-radius: 50%;
+                height: 70px;
+                width: 70px;
+                display: inline-block;
+                text-align: center;
+                vertical-align: middle;
+                line-height: 70px;
+                color: white;
+            }
+
+            button {
+                width: 100px;
+                height: 50px;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+
+        <br />
+        <button id='btn'>Apply style to data</button>
+
+        <script>
+            d3.selectAll(".circle")
+                .data([-13, 5, 8, -4, 14])
+
+
+            document.getElementById('btn').onclick = function() {
+                d3.selectAll(".circle")
+                    .style("background-color", function(d) {
+                        if (d < 0) return "red";
+                        else if (d > 10) return "green";
+                        else return "gray";
+                    })
+                    .text(function(d) {
+                        return d;
+                    });
+            };
+        </script>  
+    </body>
+</html>

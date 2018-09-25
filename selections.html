@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="./lib/d3.min.js"></script>
+</head>
+
+<html>
+    <body>
+        <div class="messages">
+            <h1 id="greeting">Default greeting</h1>
+        </div>
+
+        <script>
+            var messages = d3.select(".messages");
+            
+            messages
+                .select("h1")
+                .text("Hello JS Guild");
+            
+            messages
+                .append("p")
+                .text("Let's learn some JS");
+
+            messages
+                .append("ul")
+                    .append("li")
+                        .text("Set up D3")
+                    .append("li")
+                        .text("Make some graphs")
+               
+        </script>
+    </body>
+</html>
