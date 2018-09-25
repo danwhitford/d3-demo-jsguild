@@ -22,22 +22,22 @@
 
     <script>
         const easers = [
-            d3.easeLinear,
-            d3.easePoly,
-            d3.easeQuad,
-            d3.easeCubic,
-            d3.easeSin,
-            d3.easeExp,
-            d3.easeCircle,
-            d3.easeElastic,
-            d3.easeBack,
-            d3.easeBounce
+            "easeLinear",
+            "easePoly",
+            "easeQuad",
+            "easeCubic",
+            "easeSin",
+            "easeExp",
+            "easeCircle",
+            "easeElastic",
+            "easeBack",
+            "easeBounce"
         ]
 
         const svg = d3.select("svg");
 
         easers.forEach((f, i) => {
-            console.log(f.prototype.name);
+            const ease = d3[f];
             svg.append("line")
                 .attr("x1", 50)
                 .attr("x2", 50)
@@ -49,15 +49,16 @@
                 })
                 .transition()
                 .duration(3000)
-                .ease(f)
-                    .attr("x2", 500)
+                .ease(ease)
+                    .attr("x2", 600)
 
             svg.append("text")
-                .attr("x", 10)
+                .attr("x", 55)
                 .attr("y", function() {
                     return 50 * (i+1);
                 })
-                .text();
+                .style("fill", "white")
+                .text(f);
         })
 
 
