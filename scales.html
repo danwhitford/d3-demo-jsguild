@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="./lib/d3.min.js"></script>
+
+    <style>
+        svg {
+            height: 500px;
+            width: 100%;
+        }
+
+        rect { 
+            fill: steelblue;
+            stroke: white;
+        }
+    </style>
+</head>
+
+<html>
+    <body>
+        <svg></svg>
+        <br />
+        <button id='btn'>Refresh data</button>
+
+        <script>
+            var data = []
+            for (i=0; i < 20; ++i) {
+                data.push(Math.random())
+            }
+
+            const svg = d3.select("svg");
+
+            const svg_width = svg.node().getBoundingClientRect().width;
+            const width_scale = d3.scaleLinear()
+                .domain([0, 1])
+                .range([0, svg_width]);
+
+
+            const colorScale = d3.scaleLinear()
+                    .domain([d3.min(data), d3.max(data)])
+                    .range(['#ffff66', '#009933']);
+
+
+            d3.select("svg")
+                .selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect")
+                    .attr("x", 0)
+                    .attr("y", function(d, i) {
+                        return (500 / data.length) * i;
+                    })
+                    .attr("width", width_scale)
+                    .attr("height", function() {
+                        return 500 / data.length;
+                    })
+                    .style("fill", colorScale);
+
+            document.getElementById('btn').onclick = function() {
+                for (i=0; i < 20; ++i) {
+                    data[i] = Math.random()
+                }
+
+                d3.select("svg")
+                    .selectAll("rect")
+                    .data(data)
+                    .transition()
+                    .duration(1200)
+                        .attr("width",  width_scale)
+                    .transition()
+                    .duration(1800)
+                        .style("fill", colorScale);
+            }   
+
+        </script>
+    </body>
+</html>
