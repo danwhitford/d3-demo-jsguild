@@ -65,20 +65,23 @@
         function step() {
             let newGrid = grid.map(row => row.slice());
 
+            const next = p => p < grid.length-1 ? p+1 : 0;
+            const prev = p => p > 0 ? p-1 : grid.length-1;
+
             for(x=0; x < grid.length; ++x) {
                 for(y=0; y < grid.length; ++y) {
                     let liveNeighbours = 0;
 
-                    if (y < grid.length-1) liveNeighbours += grid[x][y+1];
-                    if (y > 0) liveNeighbours += grid[x][y-1];
+                    liveNeighbours += grid[x][next(y)];
+                    liveNeighbours += grid[x][prev(y)];
 
-                    if (grid[x-1] && y > 0) liveNeighbours += grid[x-1][y-1];
-                    if (grid[x-1]) liveNeighbours += grid[x-1][y];
-                    if (grid[x-1] && y < grid.length-1) liveNeighbours += grid[x-1][y+1];
+                    liveNeighbours += grid[prev(x)][prev(y)];
+                    liveNeighbours += grid[prev(x)][y];
+                    liveNeighbours += grid[prev(x)][next(y)];
 
-                    if (grid[x+1] && y > 0) liveNeighbours += grid[x+1][y-1];
-                    if (grid[x+1]) liveNeighbours += grid[x+1][y];
-                    if (grid[x+1] && y < grid.length-1) liveNeighbours += grid[x+1][y+1];
+                    liveNeighbours += grid[next(x)][prev(y)];
+                    liveNeighbours += grid[next(x)][y];
+                    liveNeighbours += grid[next(x)][next(y)];
 
                     if (grid[x][y] === 1) {
                         if (liveNeighbours < 2 || liveNeighbours > 3) {
