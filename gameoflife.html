@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="./lib/d3.min.js"></script>
+
+        <style>
+            rect {
+                stroke: steelblue;
+                stroke-width: 1px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <details>
+            <summary>What is this?</summary>
+            <p>This is an implementation of <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Conway's Game of Life</a></p>
+        </details>
+
+        <svg id="grid"></svg>
+        <br />
+        <button id="step">Step one generation</button>
+        <button id="start">Auto-step</button>
+        <button id="stop">Stop stepping</button>
+    </body>
+
+    <script>
+        const gridSize = 40;
+        const cellSize = 15;
+        let stepper;
+
+        const row = size => {
+            const a = new Array(size);
+            for(i=0; i<size; ++i) {
+                a[i] = i;
+            }
+            return a;
+        }
+
+        let grid = new Array(gridSize);
+        for(i=0; i<gridSize; ++i) {
+            grid[i] = new Array(gridSize);
+            for(j=0; j<gridSize; ++j) {
+                grid[i][j] = 0;
+            }
+        }
+
+        const svg = d3.select("svg");
+
+        svg
+            .style("height", function() {return gridSize * cellSize})
+            .style("width", function() {return gridSize * cellSize});
+
+        function redrawGrid() {
+            svg.selectAll("g")
+                .data(grid)
+                    .selectAll("rect")
+                    .data(function(d) { return d; })
+                        .transition()
+                        .duration(125)
+                        .style("fill", function(d) { return d === 1 ? 'steelblue' : 'white' })
+        }
+
+        function step() {
+            let newGrid = grid.map(row => row.slice());
+
+            for(x=0; x < grid.length; ++x) {
+                for(y=0; y < grid.length; ++y) {
+                    let liveNeighbours = 0;
+
+                    if (y < grid.length-1) liveNeighbours += grid[x][y+1];
+                    if (y > 0) liveNeighbours += grid[x][y-1];
+
+                    if (grid[x-1] && y > 0) liveNeighbours += grid[x-1][y-1];
+                    if (grid[x-1]) liveNeighbours += grid[x-1][y];
+                    if (grid[x-1] && y < grid.length-1) liveNeighbours += grid[x-1][y+1];
+
+                    if (grid[x+1] && y > 0) liveNeighbours += grid[x+1][y-1];
+                    if (grid[x+1]) liveNeighbours += grid[x+1][y];
+                    if (grid[x+1] && y < grid.length-1) liveNeighbours += grid[x+1][y+1];
+
+                    if (grid[x][y] === 1) {
+                        if (liveNeighbours < 2 || liveNeighbours > 3) {
+                            newGrid[x][y] = 0;
+                        }
+                    } else {
+                        if (liveNeighbours === 3) {
+                            newGrid[x][y] = 1;
+                        }
+                    }
+                }
+            }
+            grid = newGrid;
+            redrawGrid();
+        }
+
+        svg.selectAll("g")
+            .data(grid)
+            .enter()
+            .append("g")
+                .attr("transform", function (d, i) {
+                    return "translate(" + i * cellSize + ")"
+                })
+            .selectAll("rect")
+                .data(function(d) { return d; })
+                .enter()
+                .append("rect")
+                    .style("fill", function(d) { return d === 1 ? 'steelblue' : 'white' })
+                    .style("height", cellSize)
+                    .style("width", cellSize)
+                    .attr("class", "cell")
+                    .attr("y", function(d, i) { 
+                        return i * cellSize;
+                    })
+
+        document.getElementById("grid").onclick = function(event) {
+            console.log(event)
+            const x = Math.floor(event.offsetX / cellSize);
+            const y = Math.floor(event.offsetY / cellSize);
+            grid[x][y] = grid[x][y] ? 0 : 1;
+
+            redrawGrid();
+        }
+            
+        document.getElementById("step").onclick = step;
+
+        document.getElementById("start").onclick = function() {
+            stepper = setInterval(step, 500);
+        }
+
+        document.getElementById("stop").onclick = function() {
+            clearInterval(stepper);
+        }
+
+    </script>
+</html>
