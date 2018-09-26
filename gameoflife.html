@@ -115,7 +115,6 @@
                     })
 
         document.getElementById("grid").onclick = function(event) {
-            console.log(event)
             const x = Math.floor(event.offsetX / cellSize);
             const y = Math.floor(event.offsetY / cellSize);
             grid[x][y] = grid[x][y] ? 0 : 1;
