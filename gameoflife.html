@@ -126,11 +126,13 @@
         document.getElementById("step").onclick = step;
 
         document.getElementById("start").onclick = function() {
-            stepper = setInterval(step, 500);
+            if (!stepper) {
+                stepper = setInterval(step, 500);
+            }
         }
 
         document.getElementById("stop").onclick = function() {
-            clearInterval(stepper);
+            stepper = clearInterval(stepper);
         }
 
     </script>
